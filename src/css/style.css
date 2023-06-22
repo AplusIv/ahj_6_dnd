@@ -3,19 +3,17 @@ body {
 }
 
 button {
-  position: relative;
 
   box-sizing: border-box;
   display: block;
-  margin: 0 auto;
-  padding: 10px;
-  font-size: 20px;
+  padding: 5px;
 
-  background-color: red;
+  background-color: greenyellow;
   color: white;
-  border: 1px solid red;
+  border: 1px solid greenyellow;
   border-radius: 5%;
 
+  text-transform: uppercase; 
   cursor: pointer;
 }
 
@@ -23,21 +21,133 @@ button:hover {
   opacity: 0.6;
 }
 
+textarea {
+  width: -webkit-fill-available;
+}
+
+.add-note {
+  /* margin-top: 55px; */
+}
 .container {
   /* padding-top: 100px; */
   display: flex;
   flex-direction: row;
-  background-color: lightgray;  
+  justify-content: space-around;
+  min-height: 400px;
+  background-color: blue  
 }
 
 .column {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
   box-sizing: border-box;
-  width: 33%;
+  width: 30%;
+  padding: 3px;
 
   border: 1px solid black;
   border-radius: 3px;
-  background-color: lightgray;  
+  background-color: lightgray;
+  text-transform: uppercase; 
 }
+
+.close {
+  /* padding-left: 10px; */
+  position: absolute;
+  /* position: relative; */
+  z-index: 10;
+  color: red;
+}
+
+.close.hidden {
+  /* display: block; */
+}
+
+.delete-note {
+  position: absolute;
+  /* z-index: 1000; */
+  color: red;
+}
+
+.grabbable {
+  cursor: move; /* fallback if grab cursor is unsupported */
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab;
+}
+
+/* (Optional) Apply a "closed-hand" cursor during drag operation. */
+.grabbable:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+}
+
+.drag-me.draggable-by-jquery-ui {
+  background-color: #f60;
+}
+
+.draggable-by-jquery-ui {
+  cursor: url("https://www.google.com/intl/en_ALL/mapfiles/openhand.cur"), all-scroll;
+  cursor: -webkit-grab;
+  cursor: -moz-grab;
+  cursor: -o-grab;
+  cursor: -ms-grab;
+  cursor: grab;
+}
+
+.draggable-by-jquery-ui:active {
+  cursor: url("https://www.google.com/intl/en_ALL/mapfiles/closedhand.cur"), all-scroll;
+  cursor: -webkit-grabbing;
+  cursor: -moz-grabbing;
+  cursor: -o-grabbing;
+  cursor: -ms-grabbing;
+  cursor: grabbing;
+}
+
+.hidden {
+  display: none;
+}
+
+.title {
+  color: yellow;
+}
+
+.note {
+  padding: 2px;
+  margin-bottom: 5px;
+  background-color: white;
+  border-radius: 3px;
+
+  text-transform: none;
+
+  /* cursor: move;
+  cursor: grab;
+  cursor: -moz-grab;
+  cursor: -webkit-grab; */
+  /* cursor: pointer; */
+  /* z-index: -1; */
+}
+
+.note.dragged {
+  position: absolute;
+  z-index: 100;
+  pointer-events: none;
+  background-color: aqua;
+  /* cursor: grabbing; */
+  cursor: grab;
+}
+
+.note.dragged:active {
+  cursor: grabbing;
+}
+
+/* .note:active {
+  cursor: grabbing;
+  cursor: -moz-grabbing;
+  cursor: -webkit-grabbing;
+} */
 
 .popover {
   position: absolute;
