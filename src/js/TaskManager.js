@@ -2,8 +2,17 @@ export default class TaskManager {
   constructor(element) {
     this.element = element;
 
-    this.onOpenNote = this.onOpenNote.bind(this);
-    this.element.addEventListener('click', this.onOpenNote);
+    // this.onOpenNote = this.onOpenNote.bind(this);
+    this.element.addEventListener('click', TaskManager.onOpenNote);
+
+    /* this.onOpenNote = this.onOpenNote.bind(this);
+    this.element.addEventListener('click', this.onOpenNote); */
+
+    // this.OnAddTask = this.OnAddTask.bind(this);
+    this.element.addEventListener('click', TaskManager.OnAddTask);
+
+    /* this.OnAddTask = this.OnAddTask.bind(this);
+    this.element.addEventListener('click', this.OnAddTask); */
 
     this.onCloseNote = this.onCloseNote.bind(this);
     this.element.addEventListener('click', this.onCloseNote);
@@ -15,9 +24,6 @@ export default class TaskManager {
 
     this.noteOnMouseUp = this.noteOnMouseUp.bind(this);
     this.element.addEventListener('mouseup', this.noteOnMouseUp);
-
-    this.OnAddTask = this.OnAddTask.bind(this);
-    this.element.addEventListener('click', this.OnAddTask);
 
     this.onMouseOver = this.onMouseOver.bind(this);
     this.element.addEventListener('mouseover', this.onMouseOver);
@@ -51,10 +57,7 @@ export default class TaskManager {
         <div class="title" name="in progress">in progress</div>
         <div class="content">
           <div class="note-wrapper">
-            <div class="note">Выучиться на веб-разработчика 2.0 /n 76475r67365 \n jhrkehvkhvk</div>
-          </div>
-          <div class="note-wrapper">
-            <div class="note">Выучиться на веб-разработчика\njhrkehvkhvk</div>
+            <div class="note">Выучиться на веб-разработчика</div>
           </div>
         </div>
       </div>
@@ -104,8 +107,6 @@ export default class TaskManager {
   bindToDom() {
     this.element.innerHTML = TaskManager.markup;
 
-    // this.element.insertAdjacentHTML('afterend', TaskManager.closingElement);
-
     this.noteClosingElement = TaskManager.closingElement;
 
     this.contents = this.element.querySelectorAll('.content');
@@ -115,7 +116,7 @@ export default class TaskManager {
     });
   }
 
-  onOpenNote(e) {
+  static onOpenNote(e) {
     e.preventDefault();
     if (e.target.classList.contains('open-note-content')) {
       e.target
@@ -129,7 +130,7 @@ export default class TaskManager {
     }
   }
 
-  OnAddTask(e) {
+  static OnAddTask(e) {
     e.preventDefault();
     // console.log(this.element);
 
@@ -137,13 +138,11 @@ export default class TaskManager {
       console.log('click');
       const textarea = e.target.parentElement.querySelector('textarea');
       const { value } = textarea; // без переносов строки
-      console.log(e.target.closest('.column'));
       if (value) {
         e.target
           .closest('.column')
           .querySelector('.content')
           .appendChild(TaskManager.newNote(value));
-        console.log(textarea);
         textarea.value = '';
 
         e.target
@@ -173,10 +172,6 @@ export default class TaskManager {
       e.target.dataset.closing = 'possible';
       this.showCLosingElement(e.target);
     }
-
-    /* if (e.target.classList.contains('note') || e.target.classList.contains('close')) {
-      this.showCLosingElement(e.target);
-    } */
   }
 
   onMouseOut(e) {
@@ -222,7 +217,7 @@ export default class TaskManager {
     closingElement.style.left = `${right - 20}px`;
   }
 
-  hideCLosingElement(element) {
+  hideCLosingElement() {
     const closingElement = document.querySelector('.close');
     closingElement.remove();
     // closingElement.classList.add('hidden');
@@ -230,7 +225,7 @@ export default class TaskManager {
   }
 
   noteOnMouseDown(e) {
-    // e.preventDefault();
+    e.preventDefault();
 
     if (e.target.classList.contains('note')) {
       console.log('mousedown');
@@ -248,12 +243,16 @@ export default class TaskManager {
   }
 
   noteOnMouseOver(e) {
-    // e.preventDefault();
+    e.preventDefault();
 
     if (this.draggedElement) {
       console.log(e);
+      console.log(e.target);
 
       this.draggedElement.style.cursor = 'grabbing';
+
+      /*       this.draggedElement.style.top = `${e.clientY + e.target.offsetTop}px`;
+      this.draggedElement.style.left = `${e.clientX - e.target.offsetWidth}px`; */
 
       this.draggedElement.style.top = `${e.clientY}px`;
       this.draggedElement.style.left = `${e.clientX}px`;

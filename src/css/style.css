@@ -25,9 +25,6 @@ textarea {
   width: -webkit-fill-available;
 }
 
-.add-note {
-  /* margin-top: 55px; */
-}
 .container {
   /* padding-top: 100px; */
   display: flex;
@@ -58,10 +55,6 @@ textarea {
   /* position: relative; */
   z-index: 10;
   color: red;
-}
-
-.close.hidden {
-  /* display: block; */
 }
 
 .delete-note {
@@ -117,7 +110,6 @@ textarea {
 .note {
   padding: 2px;
   margin-bottom: 5px;
-  background-color: white;
   border-radius: 3px;
 
   text-transform: none;
@@ -130,6 +122,9 @@ textarea {
   /* z-index: -1; */
 }
 
+.note-wrapper {
+  background-color: white;
+}
 .note-wrapper.dragged {
   position: absolute;
   z-index: 100;
@@ -141,28 +136,4 @@ textarea {
 
 .note-wrapper.dragged:active {
   cursor: grabbing;
-}
-
-/* .note:active {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
-} */
-
-.popover {
-  position: absolute;
-  width: 350px;
-  box-sizing: border-box;
-  border: 1px solid black;
-  border-radius: 4%;
-}
-
-.popover-title {
-  font-weight: 700;
-  padding: 5px;
-  background-color: grey;
-}
-
-.popover-content {
-  padding: 5px;
 }

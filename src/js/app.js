@@ -1,4 +1,4 @@
-import TaskManager from './taskManager';
+import TaskManager from './TaskManager';
 
 const container = document.querySelector('.container');
 
@@ -38,7 +38,8 @@ window.addEventListener('DOMContentLoaded', () => {
       const value = Object.values(data)[0];
 
       const titleElement = document.querySelector(`[name="${key}"]`);
-      titleElement.closest('.column').querySelector('.content').innerHTML = value;
+      titleElement.closest('.column').querySelector('.content').innerHTML =
+        value;
     });
   }
 });
