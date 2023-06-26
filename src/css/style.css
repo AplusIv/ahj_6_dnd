@@ -130,7 +130,7 @@ textarea {
   /* z-index: -1; */
 }
 
-.note.dragged {
+.note-wrapper.dragged {
   position: absolute;
   z-index: 100;
   pointer-events: none;
@@ -139,7 +139,7 @@ textarea {
   cursor: grab;
 }
 
-.note.dragged:active {
+.note-wrapper.dragged:active {
   cursor: grabbing;
 }
 

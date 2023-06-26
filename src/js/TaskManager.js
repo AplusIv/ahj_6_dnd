@@ -1,9 +1,6 @@
-// import Popover from './popover copy';
-
 export default class TaskManager {
   constructor(element) {
     this.element = element;
-    // this.columns = this.element.querySelectorAll('.column');
 
     this.onOpenNote = this.onOpenNote.bind(this);
     this.element.addEventListener('click', this.onOpenNote);
@@ -12,11 +9,6 @@ export default class TaskManager {
     this.element.addEventListener('click', this.onCloseNote);
 
     this.noteOnMouseDown = this.noteOnMouseDown.bind(this);
-
-    /* this.noteOnMouseDown = this.noteOnMouseDown.bind(this);
-    this.columns.forEach((column) => {
-      column.addEventListener('mousedown', this.noteOnMouseDown);
-    }); */
 
     this.noteOnMouseOver = this.noteOnMouseOver.bind(this);
     this.element.addEventListener('mouseover', this.noteOnMouseOver);
@@ -38,9 +30,11 @@ export default class TaskManager {
     return `
     <div class="column">
       <div class="column-data">
-        <div class="title">todo</div>
+        <div class="title" name="todo">todo</div>
         <div class="content">
-          <div class="note">Научиться тайм-менеджменту</div>
+          <div class="note-wrapper">
+            <div class="note">Научиться тайм-менеджменту</div>
+          </div>
         </div>
       </div>
       <div class="add-note">
@@ -54,9 +48,14 @@ export default class TaskManager {
     </div>
     <div class="column">
       <div class="column-data">
-        <div class="title">in progress</div>
+        <div class="title" name="in progress">in progress</div>
         <div class="content">
-          <div class="note">Выучиться на веб-разработчика</div>
+          <div class="note-wrapper">
+            <div class="note">Выучиться на веб-разработчика 2.0 /n 76475r67365 \n jhrkehvkhvk</div>
+          </div>
+          <div class="note-wrapper">
+            <div class="note">Выучиться на веб-разработчика\njhrkehvkhvk</div>
+          </div>
         </div>
       </div>
       <div class="add-note">
@@ -70,10 +69,14 @@ export default class TaskManager {
     </div>
     <div class="column">
       <div class="column-data">
-        <div class="title">done</div>
+        <div class="title" name="done">done</div>
         <div class="content">
-          <div class="note">Помыть посуду</div>
-          <div class="note">Погулять</div>
+          <div class="note-wrapper">
+            <div class="note">Помыть посуду</div>
+          </div>
+          <div class="note-wrapper">
+            <div class="note">Погулять</div>
+          </div>
           <div class="note-wrapper">
             <div class="note">Сходить в магазин</div>
           </div>
@@ -92,15 +95,18 @@ export default class TaskManager {
   }
 
   static get closingElement() {
-    return `
-      <div class="close hidden">x</div>
-    `;
+    const closingElement = document.createElement('div');
+    closingElement.classList.add('close', 'hidden');
+    closingElement.textContent = `x`;
+    return closingElement;
   }
 
   bindToDom() {
     this.element.innerHTML = TaskManager.markup;
 
-    this.element.insertAdjacentHTML('afterend', TaskManager.closingElement);
+    // this.element.insertAdjacentHTML('afterend', TaskManager.closingElement);
+
+    this.noteClosingElement = TaskManager.closingElement;
 
     this.contents = this.element.querySelectorAll('.content');
 
@@ -116,7 +122,9 @@ export default class TaskManager {
         .closest('.add-note')
         .querySelector('.new-note-content')
         .classList.toggle('hidden');
-      console.log('Маяк');
+
+      e.target.closest('.add-note').querySelector('textarea').focus();
+
       e.target.classList.toggle('hidden');
     }
   }
@@ -138,53 +146,29 @@ export default class TaskManager {
         console.log(textarea);
         textarea.value = '';
 
-        e.target.closest('.add-note').querySelector('.open-note-content').classList.toggle('hidden');
+        e.target
+          .closest('.add-note')
+          .querySelector('.open-note-content')
+          .classList.toggle('hidden');
         e.target.parentElement.classList.toggle('hidden');
       }
     }
-    // console.log(e);
-    /* e.target
-      .closest('.add-note')
-      .querySelector('.new-note-content')
-      .classList.toggle('hidden'); */
-
-    // e.target.parentElement.classList.toggle('hidden');
   }
 
   static newNote(value) {
+    const wrapper = document.createElement('div');
+    wrapper.classList.add('note-wrapper');
+
     const note = document.createElement('div');
     note.classList.add('note');
     note.textContent = value;
-    return note;
+
+    wrapper.appendChild(note);
+    return wrapper;
   }
-
-  /* onCloseNote(e) {
-    if (e.target.classList.contains('.delete-note')) {
-      e.preventDefault();
-      console.log(this.element);
-      console.log('delete note');
-      // e.target.parentElement.remove();
-      e.target.closest('note-wrapper').remove();
-    }
-  } */
-
-  /* onMouseOver(e) {
-    e.preventDefault();
-    if (e.target.classList.contains('note-wrapper')) {
-      const popover = this.creatPopover;
-      this.showPopover(e.target);
-    }
-  }
-
-  onMouseOut(e) {
-    e.preventDefault();
-    if (e.target.classList.contains('note-wrapper')) {
-      this.hidePopover(e.target);
-    }
-  } */
 
   onMouseOver(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.target.classList.contains('note')) {
       e.target.dataset.closing = 'possible';
       this.showCLosingElement(e.target);
@@ -196,13 +180,14 @@ export default class TaskManager {
   }
 
   onMouseOut(e) {
-    e.preventDefault();
+    // e.preventDefault();
     if (e.target.classList.contains('note')) {
       if (e.relatedTarget.classList.contains('close')) {
         // если перешёл на закрывающий элемент, продолжить его отображение
         this.showCLosingElement(e.target);
       } else {
-        this.hideCLosingElement(e.target);
+        // this.hideCLosingElement(e.target);
+        this.hideCLosingElement();
         delete e.target.dataset.closing;
       }
       // this.hideCLosingElement(e.target);
@@ -211,92 +196,65 @@ export default class TaskManager {
 
   onCloseNote(e) {
     if (e.target.classList.contains('close')) {
-      e.preventDefault();
+      // e.preventDefault();
       console.log(this.element);
       console.log('delete note');
-      // e.target.parentElement.remove();
+      e.target.parentElement.remove();
       // e.target.closest('note-wrapper').remove();
     }
   }
 
   showCLosingElement(element) {
+    /* element
+      .closest('.note-wrapper')
+      .insertAdjacentHTML('afterend', TaskManager.closingElement); */
+    element.closest('.note-wrapper').appendChild(this.noteClosingElement);
+
     const closingElement = document.querySelector('.close');
     closingElement.classList.remove('hidden');
+
+    element.parentElement.appendChild(closingElement);
 
     console.log(element.getBoundingClientRect());
     const { right, top } = element.getBoundingClientRect();
 
     closingElement.style.top = `${top + 5}px`;
     closingElement.style.left = `${right - 20}px`;
-    // closingElement.style.left = `${left}px`;
-
-    // closingElement.style.right = '-5px';
-
   }
 
   hideCLosingElement(element) {
     const closingElement = document.querySelector('.close');
-    closingElement.classList.add('hidden');
-  }
-
-  get creatPopover() {
-    const popover = document.createElement('div');
-    popover.classList.add('delete-note');
-    popover.textContent = 'x';
-
-    // popover.textContent = "\u{E951}";
-    // popover.textContent = String.fromCharCode(59729);
-
-    console.log(popover);
-    return popover;
-  }
-
-  showPopover(element) {
-    const popover = this.creatPopover;
-    element.style.position = 'relative';
-    element.appendChild(popover);
-
-
-    // console.log(getComputedStyle(element));
-
-    popover.style.top = `3px`;
-    popover.style.right = `5px`;
-    // popover.style.top = `${element.top - 5}px`;
-    // popover.style.right = `${element.right + 5}px`;
-    element.classList.add('popover-showed');
-    this.popover = popover;
-  }
-
-  hidePopover(element) {
-    element.classList.remove('popover-showed');
-    element.style.position = 'static';
-
-    // const popover = document.querySelector('.popover');
-    this.popover.remove();
+    closingElement.remove();
+    // closingElement.classList.add('hidden');
+    this.noteClosingElement.classList.add('hidden');
   }
 
   noteOnMouseDown(e) {
-    e.preventDefault();
-    // e.stopPropagation(); // прекратить всплытие
+    // e.preventDefault();
 
     if (e.target.classList.contains('note')) {
       console.log('mousedown');
-    
-      this.draggedElement = e.target;
+      console.log(e.target);
+
+      this.draggedElement = e.target.closest('.note-wrapper');
       this.draggedElement.classList.add('dragged');
-  
+
       document.documentElement.addEventListener('mouseup', this.noteOnMouseUp); // documentElement - корневой элемент
-      document.documentElement.addEventListener('mouseover', this.noteOnMouseOver);
+      document.documentElement.addEventListener(
+        'mouseover',
+        this.noteOnMouseOver
+      );
     }
   }
 
   noteOnMouseOver(e) {
-    e.preventDefault();
-
+    // e.preventDefault();
 
     if (this.draggedElement) {
       console.log(e);
-      // this.draggedElement.style.cursor = 'grabbing';
+
+      this.draggedElement.style.cursor = 'grabbing';
+
       this.draggedElement.style.top = `${e.clientY}px`;
       this.draggedElement.style.left = `${e.clientX}px`;
     }
@@ -308,10 +266,18 @@ export default class TaskManager {
       const mouseUpItem = e.target;
       console.dir(mouseUpItem);
       if (mouseUpItem.classList.contains('note')) {
+        // Определяю порядок вставки элемента: до или после.
         if (e.clientY > mouseUpItem.offsetTop + mouseUpItem.offsetHeight / 2) {
-          mouseUpItem.parentElement.insertBefore(this.draggedElement, mouseUpItem.nextSibling);
+          mouseUpItem
+            .closest('.content')
+            .insertBefore(
+              this.draggedElement,
+              mouseUpItem.parentElement.nextSibling
+            );
         } else {
-          mouseUpItem.parentElement.insertBefore(this.draggedElement, mouseUpItem);
+          mouseUpItem
+            .closest('.content')
+            .insertBefore(this.draggedElement, mouseUpItem.parentElement);
         }
       }
 
@@ -323,8 +289,14 @@ export default class TaskManager {
       this.draggedElement = undefined;
       console.log('mouseup');
 
-      document.documentElement.removeEventListener('mouseup', this.noteOnMouseUp); // documentElement - корневой элемент
-      document.documentElement.removeEventListener('mouseover', this.noteOnMouseOver);  
+      document.documentElement.removeEventListener(
+        'mouseup',
+        this.noteOnMouseUp
+      ); // documentElement - корневой элемент
+      document.documentElement.removeEventListener(
+        'mouseover',
+        this.noteOnMouseOver
+      );
     }
   }
 }
