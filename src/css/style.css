@@ -26,7 +26,6 @@ textarea {
 }
 
 .container {
-  /* padding-top: 100px; */
   display: flex;
   flex-direction: row;
   justify-content: space-around;
@@ -50,53 +49,19 @@ textarea {
 }
 
 .close {
-  /* padding-left: 10px; */
   position: absolute;
-  /* position: relative; */
   z-index: 10;
+  cursor: pointer;
   color: red;
+}
+
+.close::before {
+  content: '\2716';
 }
 
 .delete-note {
   position: absolute;
-  /* z-index: 1000; */
   color: red;
-}
-
-.grabbable {
-  cursor: move; /* fallback if grab cursor is unsupported */
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab;
-}
-
-/* (Optional) Apply a "closed-hand" cursor during drag operation. */
-.grabbable:active {
-  cursor: grabbing;
-  cursor: -moz-grabbing;
-  cursor: -webkit-grabbing;
-}
-
-.drag-me.draggable-by-jquery-ui {
-  background-color: #f60;
-}
-
-.draggable-by-jquery-ui {
-  cursor: url("https://www.google.com/intl/en_ALL/mapfiles/openhand.cur"), all-scroll;
-  cursor: -webkit-grab;
-  cursor: -moz-grab;
-  cursor: -o-grab;
-  cursor: -ms-grab;
-  cursor: grab;
-}
-
-.draggable-by-jquery-ui:active {
-  cursor: url("https://www.google.com/intl/en_ALL/mapfiles/closedhand.cur"), all-scroll;
-  cursor: -webkit-grabbing;
-  cursor: -moz-grabbing;
-  cursor: -o-grabbing;
-  cursor: -ms-grabbing;
-  cursor: grabbing;
 }
 
 .hidden {
@@ -113,17 +78,18 @@ textarea {
   border-radius: 3px;
 
   text-transform: none;
-
-  /* cursor: move;
-  cursor: grab;
-  cursor: -moz-grab;
-  cursor: -webkit-grab; */
-  /* cursor: pointer; */
-  /* z-index: -1; */
 }
 
 .note-wrapper {
   background-color: white;
+}
+
+.note-wrapper:hover {
+  cursor: grab;
+}
+
+.note-wrapper:active {
+  cursor: grabbing;
 }
 .note-wrapper.dragged {
   position: absolute;
@@ -131,9 +97,21 @@ textarea {
   pointer-events: none;
   background-color: aqua;
   /* cursor: grabbing; */
-  cursor: grab;
+  /* cursor: grabbing; */
 }
 
-.note-wrapper.dragged:active {
+/* .note-wrapper:active {
   cursor: grabbing;
+} */
+
+/* .note-wrapper.dragged:active {
+  cursor: grabbing;
+} */
+
+/* .note-wrapper:active {
+  cursor: grabbing;
+} */
+
+.proection {
+  background-color: #f60;
 }

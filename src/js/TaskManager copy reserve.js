@@ -5,16 +5,25 @@ export default class TaskManager {
     this.draggedElement = null;
     this.noteClosingElement = null;
 
+    // this.onOpenNote = this.onOpenNote.bind(this);
     this.element.addEventListener('click', TaskManager.onOpenNote);
 
+    /* this.onOpenNote = this.onOpenNote.bind(this);
+    this.element.addEventListener('click', this.onOpenNote); */
+
+    // this.OnAddTask = this.OnAddTask.bind(this);
     this.element.addEventListener('click', TaskManager.OnAddTask);
 
-    // this.onCloseNote = this.onCloseNote.bind(this);
-    this.element.addEventListener('click', TaskManager.onCloseNote);
+    /* this.OnAddTask = this.OnAddTask.bind(this);
+    this.element.addEventListener('click', this.OnAddTask); */
+
+    this.onCloseNote = this.onCloseNote.bind(this);
+    this.element.addEventListener('click', this.onCloseNote);
 
     this.noteOnMouseDown = this.noteOnMouseDown.bind(this);
 
     this.noteOnMouseMove = this.noteOnMouseMove.bind(this);
+    // this.element.addEventListener('mouseover', this.noteOnMouseOver);
     this.element.addEventListener('mousemove', this.noteOnMouseMove);
 
     this.noteOnMouseUp = this.noteOnMouseUp.bind(this);
@@ -25,6 +34,9 @@ export default class TaskManager {
 
     this.onMouseOut = this.onMouseOut.bind(this);
     this.element.addEventListener('mouseout', this.onMouseOut);
+
+    /* this.onMouseOver2 = this.onMouseOver2.bind(this);
+    this.element.addEventListener('mouseover', this.onMouseOver2); */
   }
 
   static get markup() {
@@ -158,7 +170,24 @@ export default class TaskManager {
     return wrapper;
   }
 
+  // Работающий оригинал
+  /* onMouseOver(e) {
+    // e.preventDefault();
+    if (e.target.classList.contains('note')) {
+      e.target.dataset.closing = 'possible';
+      this.showCLosingElement(e.target);
+
+      this.proection = TaskManager.creatProection(this.draggedElement); // добавление проекции перетягиваемого элемента      
+      // e.target.closest('.note-wrapper').insertAdjacentElement('afterend', this.proection);
+      
+      console.log(e);
+      // const mouseUpElement = e.target;
+      // TaskManager.definePlace(e, this.proection, mouseUpElement);
+    }
+  } */
+
   onMouseOver(e) {
+    // e.preventDefault();
     if (e.target.classList.contains('note')) {
       e.target.dataset.closing = 'possible';
       this.showCLosingElement(e.target);
@@ -166,28 +195,73 @@ export default class TaskManager {
       const { width, height } = e.target.getBoundingClientRect();
       this.width = width;
       this.height = height;
+      // console.log(this.width + ' на ' + this.height);
+      // this.proection = TaskManager.creatProection(this.draggedElement); // добавление проекции перетягиваемого элемента      
+      // e.target.closest('.note-wrapper').insertAdjacentElement('afterend', this.proection);
+
+      // console.log(e);
+      // const mouseUpElement = e.target;
+      // TaskManager.definePlace(e, this.proection, mouseUpElement);
     }
   }
 
-  onMouseOut(e) {
+  // Работающий оригинал
+  /* onMouseOut(e) {
+    // e.preventDefault();
     if (e.target.classList.contains('note')) {
       if (e.relatedTarget.classList.contains('close')) {
         // если перешёл на закрывающий элемент, продолжить его отображение
         this.showCLosingElement(e.target);
       } else {
+        // this.hideCLosingElement(e.target);
         this.hideCLosingElement();
         delete e.target.dataset.closing;
       }
+      // this.hideCLosingElement(e.target);
     }
+
+    if (e.target.classList.contains('note') && this.draggedElement && this.proection) {
+      // e.target.remove();
+      this.proection.remove();
+      this.proection = null;
+    }
+  } */
+
+  onMouseOut(e) {
+    // e.preventDefault();
+    if (e.target.classList.contains('note')) {
+      if (e.relatedTarget.classList.contains('close')) {
+        // если перешёл на закрывающий элемент, продолжить его отображение
+        this.showCLosingElement(e.target);
+      } else {
+        // this.hideCLosingElement(e.target);
+        this.hideCLosingElement();
+        delete e.target.dataset.closing;
+      }
+      // this.hideCLosingElement(e.target);
+    }
+
+    /* if (e.target.classList.contains('note') && this.draggedElement && this.proection) {
+      // e.target.remove();
+      this.proection.remove();
+      this.proection = null;
+    } */
   }
 
-  static onCloseNote(e) {
+  onCloseNote(e) {
     if (e.target.classList.contains('close')) {
+      // e.preventDefault();
+      // console.log(this.element);
+      // console.log('delete note');
       e.target.parentElement.remove();
+      // e.target.closest('note-wrapper').remove();
     }
   }
 
   showCLosingElement(element) {
+    /* element
+      .closest('.note-wrapper')
+      .insertAdjacentHTML('afterend', TaskManager.closingElement); */
     element.closest('.note-wrapper').appendChild(this.noteClosingElement);
 
     const closingElement = document.querySelector('.close');
@@ -195,6 +269,7 @@ export default class TaskManager {
 
     element.parentElement.appendChild(closingElement);
 
+    // console.log(element.getBoundingClientRect());
     const { right, top } = element.getBoundingClientRect();
 
     closingElement.style.top = `${top + 5}px`;
@@ -204,6 +279,7 @@ export default class TaskManager {
   hideCLosingElement() {
     const closingElement = document.querySelector('.close');
     closingElement.remove();
+    // closingElement.classList.add('hidden');
     this.noteClosingElement.classList.add('hidden');
   }
 
@@ -211,20 +287,33 @@ export default class TaskManager {
     e.preventDefault();
 
     if (e.target.classList.contains('note')) {
+      // console.log('mousedown');
+      // console.log(e.target);
+
       this.draggedElement = e.target.closest('.note-wrapper');
       this.draggedElement.classList.add('dragged');
 
       // this.draggedElement.style.cursor = 'grabbing';
+
+
+      // const {width, height} = window.getComputedStyle(e.target.closest('.note-wrapper'));
+      /* const {width, height} = e.target.closest('.note-wrapper').getBoundingClientRect();
+      this.width = width;
+      this.height = height;
+      console.log(this.width + ' на ' + this.height); */
+
 
       // shifts
       this.shiftX = e.clientX - e.target.getBoundingClientRect().left;
       this.shiftY = e.clientY - e.target.getBoundingClientRect().top;
 
       // сохранение первоначальных размеров
-      this.draggedElement.style.width = `${this.width}px`;
-      this.draggedElement.style.height = `${this.height}px`;
+      this.draggedElement.style.width = this.width + 'px';
+      this.draggedElement.style.height = this.height + 'px';
 
+      // !!!!
       this.proection = TaskManager.creatProection(this.draggedElement); // добавление проекции перетягиваемого элемента
+
 
       document.documentElement.addEventListener('mouseup', this.noteOnMouseUp); // documentElement - корневой элемент
       document.documentElement.addEventListener(
@@ -238,7 +327,16 @@ export default class TaskManager {
     e.preventDefault();
 
     if (this.draggedElement) {
+      // console.log(e);
+      // console.log(e.target);
+      // console.log(this.draggedElement);
+
+
+      /*       this.draggedElement.style.top = `${e.clientY + e.target.offsetTop}px`;
+      this.draggedElement.style.left = `${e.clientX - e.target.offsetWidth}px`; */
+
       // this.draggedElement.style.cursor = 'grabbing';
+
 
       this.draggedElement.style.width = `${this.width}px`;
       this.draggedElement.style.height = `${this.height}px`;
@@ -247,6 +345,13 @@ export default class TaskManager {
       this.draggedElement.style.left = `${e.clientX - this.shiftX}px`;
 
       TaskManager.definePlace(e, this.proection, e.target);
+      // const mouseUpElement = e.target;
+      // TaskManager.definePlace(e, this.proection, mouseUpElement);
+
+      /* if (e.target.classList.contains('note')) {
+        const proection = TaskManager.creatProection(this.draggedElement);
+        e.target.closest('.note-wrapper').appendChild(proection);
+      } */
     }
   }
 
@@ -254,27 +359,51 @@ export default class TaskManager {
     e.preventDefault();
 
     if (this.draggedElement) {
+      console.log(e.target);
+      /* const mouseUpItem = e.target;
+      // console.dir(mouseUpItem);
+      if (mouseUpItem.classList.contains('note')) {
+        // Определяю порядок вставки элемента: до или после.
+        if (e.clientY > mouseUpItem.offsetTop + mouseUpItem.offsetHeight / 2) {
+          mouseUpItem
+            .closest('.content')
+            .insertBefore(
+              this.draggedElement,
+              mouseUpItem.parentElement.nextSibling
+            );
+        } else {
+          mouseUpItem
+            .closest('.content')
+            .insertBefore(this.draggedElement, mouseUpItem.parentElement);
+        }
+      } */
+      
+      
+      // TaskManager.definePlace(e, this.draggedElement, e.target);
+      const shiftY = e.clientY - e.target.getBoundingClientRect().top;
       // Определяю порядок вставки элемента: до или после.
       const { y, height } = e.target.getBoundingClientRect();
 
       const appendPosition =
         y + height / 2 > e.clientY ? 'beforebegin' : 'afterend';
-
+        console.log(`${y} + ${height} / 2 > ${e.clientY} ====> ${appendPosition}`);
+    
       if (e.target.classList.contains('note')) {
-        e.target.parentElement.insertAdjacentElement(
-          appendPosition,
-          this.draggedElement
-        );
+        e.target.parentElement.insertAdjacentElement(appendPosition, this.draggedElement);
       }
       if (e.target.classList.contains('proection')) {
         e.target.insertAdjacentElement(appendPosition, this.draggedElement);
+        // mouseUpElement.remove();
       }
       if (e.target.classList.contains('column')) {
         e.target.querySelector('.content').appendChild(this.draggedElement);
       }
 
+      
       this.proection.remove();
       this.proection = null;
+      
+      // console.log('mouseup');
 
       // Убираем стили, которые навесили при перетаскивании элемента
       this.draggedElement.style.cssText = `
@@ -300,17 +429,38 @@ export default class TaskManager {
   }
 
   static definePlace(e, element, mouseUpElement) {
+    // const mouseUpItem = e.target;
+    // console.dir(mouseUpItem);
     if (mouseUpElement.classList.contains('note')) {
+
+      // shifts
+      const shiftY = e.clientY - e.target.getBoundingClientRect().top;
       // Определяю порядок вставки элемента: до или после.
       const { y, height } = e.target.getBoundingClientRect();
 
       const appendPosition =
         y + height / 2 > e.clientY ? 'beforebegin' : 'afterend';
+        console.log(`${y} + ${height} / 2 > ${e.clientY} ====> ${appendPosition}`);
 
-      mouseUpElement.parentElement.insertAdjacentElement(
-        appendPosition,
-        element
-      );
+      mouseUpElement.parentElement.insertAdjacentElement(appendPosition, element);
+    
+      /* if (e.clientY > mouseUpElement.getBoundingClientRect().top + mouseUpElement.offsetHeight / 2) {
+        // e.clientY - shiftY > mouseUpElement.offsetTop + mouseUpElement.offsetHeight / 2
+        mouseUpElement
+          .closest('.note-wrapper')
+          .insertAdjacentElement('afterend', element);
+        // mouseUpElement
+        //   .closest('.content')
+        //   .insertBefore(element, mouseUpElement.parentElement.nextSibling);
+      } else {
+        // mouseUpElement
+        // .closest('.content')
+        // .insertBefore(element, mouseUpElement.parentElement);
+        // console.log(mouseUpElement.parentElement);
+        mouseUpElement
+          .parentElement
+          .insertAdjacentElement('beforebegin', element);
+      } */
     }
   }
 
@@ -323,6 +473,7 @@ export default class TaskManager {
 	 			width: ${width};
 		 		height: ${height};
 			`;
+      // console.log(d);
       return d;
     })();
   }
